@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2013, Jake Hartz. All rights reserved.
+Use of this source code is governed by a BSD-style license
+that can be found in the LICENSE.txt file.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>LBN Electronic Bulletin Board</title>
+<link rel="stylesheet" type="text/css" href="ebb.css">
+<script type="text/javascript" src="filters.js"></script>
+<script type="text/javascript" src="../plugins.js"></script>
+<script type="text/javascript" src="head.load.min.js"></script>
+<script type="text/javascript" src="util.js"></script>
+
+<script type="text/javascript">
+var ebb = {
+    plugins: [],
+    send_update: function () {}
+};
+</script>
+<script type="text/javascript" src="ebb.input.js"></script>
+<script type="text/javascript" src="ebb.options.js"></script>
+<script type="text/javascript" src="ebb.control.js"></script>
+<script type="text/javascript">
+forEach(plugin_list, function (plugin) {
+    head.js("../plugins/" + plugin);
+});
+
+head.ready(function () {
+    // Test for everything that we might need
+    if (typeof window.postMessage == "function" &&
+        typeof JSON != "undefined" &&
+        typeof window.addEventListener == "function" &&
+        typeof document.getElementsByClassName == "function" &&
+        typeof localStorage != "undefined") {
+        
+        document.getElementById("intro").style.display = "none";
+        
+        ebb.input.load();
+        ebb.options.load();
+        ebb.control.load();
+        
+        ebb.input.start();
+    } else {
+        document.getElementById("intro").innerHTML = '<h1>ERROR: Necessary JavaScript features not found.</h1><p>Please upgrade to a newer browser.</p>';
+    }
+});
+</script>
+</head>
+
+<body>
+<div id="intro" class="panel"><noscript><h1>Please enable JavaScript to continue.</h1></noscript></div>
+
+<div id="input" class="panel" style="display: none;">
+    <h1>LBN Electronic Bulletin Board</h1>
+    <div style="display: none;"><input id="input_load_file_input" type="file"></div>
+    <table>
+        <tbody id="input_plugins"></tbody>
+        <tfoot>
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td style="text-align: center; vertical-align: top;"><div id="input_load" style="display: none;"><button id="input_load_file_btn" type="button">Load Options from LEO File</button><span id="input_load_file_info_link_container"><br>(<span id="input_load_file_info_link" class="link">more info</span>)</span></div></td>
+                <td style="text-align: center; vertical-align: top;"><button id="input_submit" type="button">Go</button></td>
+            </tr>
+        </tfoot>
+    </table>
+    <div id="input_load_file_info" style="display: none; line-height: 118%;">
+        <p>LBN Electronic Bulletin Board options can be stored in special files. These files are created by a program called the LBN EBB Optionifier. As an alternative to using the "Options" buttons above, one can use the LBN EBB Optionifier on any computer to create a file that contains details that can then be loaded here.</p>
+        <ol>
+            <li>Download the <a href="LBN EBB Optionifier.zip">LBN EBB Optionifier</a> and copy it to any computer you want.</li>
+            <li>Use the LBN EBB Optionifier to set specific options for the different plugins for the LBN Electronic Bulletin Board.</li>
+            <li>Save the *.leo file from the LBN EBB Optionifier and send it to the computer hosting the LBN Electronic Bulletin Board.</li>
+            <li>Load the file into the LBN Electronic Bulletin Board by using the "Load Options from File" button.</li>
+        </ol>
+    </div>
+</div>
+
+<div id="options" class="panel" style="display: none; margin-left: 20px;">
+    <h2 id="options_name"></h2>
+    <p id="options_updated"></p>
+    <p><button id="options_reset" type="button">Reset to Default</button></p>
+    <div id="options_options" style="border-top: 1px solid white;"></div>
+    <p><button id="options_submit" type="button">Save</button>&nbsp;&nbsp;<button id="options_cancel" type="button">Cancel</button></p>
+</div>
+
+<div id="control" style="display: none;">
+    <table class="pretty"><tbody>
+        <tr>
+            <td><button id="control_prev" type="button">Prev</button>&nbsp;&nbsp;<button id="control_next" type="button">Next</button></td>
+            <td><span id="control_play_container" style="display: none;"><button id="control_play" type="button">Play</button></span><span id="control_pause_container" style="display: none;"><button id="control_pause" type="button">Pause</button>&nbsp;&nbsp;&nbsp;&nbsp;<span id="control_timer"></span></span></td>
+            <td><button id="control_reset" type="button">Reset</button></td>
+        </tr>
+        <tr>
+            <td colspan="3">Time between slides: <input type="number" id="control_time" size="3">&nbsp;seconds&nbsp;&nbsp;<button id="control_timeset" type="button">Set all</button></td>
+        </tr>
+    </tbody></table>
+    
+    <p>&nbsp;</p>
+    
+    <table class="pretty">
+        <tbody id="control_slides"></tbody>
+    </table>
+</div>
+<div id="control_loading" style="display: none; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, .8);">
+    <table style="width: 100%; height: 100%;"><tbody>
+        <tr><td style="text-align: center; font-size: 50pt;"><span id="control_loading_content">Waiting...</span></td></tr>
+    </tbody></table>
+</div>
+</body>
+</html>

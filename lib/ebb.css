@@ -1,0 +1,106 @@
+/*
+Copyright (c) 2013, Jake Hartz. All rights reserved.
+Use of this source code is governed by a BSD-style license
+that can be found in the LICENSE.txt file.
+*/
+
+body {
+    margin: 10px;
+    padding: 0;
+    background-color: black;
+    color: white;
+    font-family: sans-serif;
+}
+
+a, a:visited, .link {
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a:hover, .link:hover {
+    text-decoration: none;
+}
+
+.panel {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid white;
+    border-radius: 9px;
+    box-shadow: 0 0 20px white, inset 0 0 8px white;
+}
+
+.panel h1, .panel h2, .panel h3 {
+    text-decoration: underline;
+}
+
+#control {
+    cursor: default;
+}
+
+table.pretty {
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+}
+
+table.pretty td {
+    margin: 0;
+    padding: 15px;
+    font-size: 10pt;
+    border: 1px solid white;
+    text-align: center;
+    vertical-align: top;
+}
+
+#control_slides > tr > td {
+    min-width: 300px;
+}
+
+.pretty_title {
+    margin-top: 10px;
+    box-shadow: inset 0 0 10px white;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    
+    -webkit-transition: background-color .8s;
+    -moz-transition:    background-color .8s;
+    -ms-transition:     background-color .8s;
+    -o-transition:      background-color .8s;
+    transition:         background-color .8s;
+}
+
+.pretty_title * {
+    font-size: inherit !important;
+    float: inherit !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.pretty_title table.pretty td {
+    min-width: 0;
+}
+
+.pretty_title img {
+    max-width: 300px;
+}
+
+.pretty_title .not-in-preview {
+    display: none !important;
+}
+
+.pretty_title .title {
+    text-decoration: underline;
+}
+
+.active {
+    background-color: yellow !important;
+    background-image: none !important;
+    color: black;
+}
