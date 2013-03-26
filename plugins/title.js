@@ -1,8 +1,8 @@
 ebb.plugins.push({
     name: "Title",
     type: "html",
-    description: "The Lynx Broadcast Network\nElectronic Bulletin Board",
-    content: '<img src="lbn-ebb.png" style="width: 100%; height: 100%;">',
+    description: "The LBN\nElectronic Bulletin Board",
+    content: '<img src="../custom/title.png" style="width: 100%; height: 100%;">',
     className: "no-font-adjust",
     noborder: true,
     position: {

@@ -315,7 +315,7 @@ function PLUGIN_weather_bgimg(condition, className, alternate) {
                 useParent: 1,
                 style: {
                     backgroundColor: "white",
-                    backgroundImage: "url(weather-images/wx-cond-" + img + "day.jpg)",
+                    backgroundImage: "url(../custom/weather-images/" + img + ".jpg)",
                     backgroundRepeat: "repeat-x"
                 }
             }
