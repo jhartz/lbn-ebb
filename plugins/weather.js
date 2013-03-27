@@ -22,7 +22,7 @@ ebb.plugins.push({
         '</tbody></table>',
         
         '<div class="title" style="font-size: 97px;">Radar</div>' +
-        '<div style="position: relative;"><div style="position: relative; overflow: hidden; width: 880px; height: 506px;"><img class="PLUGIN_weather_radar" style="margin-top: -40px;"></div><div style="position: absolute; left: ' + PLUGIN_weather_marker[0] + 'px; top: ' + PLUGIN_weather_marker[1] + 'px" class="not-in-preview"><img src="marker.png"></div></div>'
+        '<div style="position: relative;"><div style="position: relative; overflow: hidden; width: 880px; height: 506px;"><img class="PLUGIN_weather_radar" style="margin-top: -40px;"></div><div style="position: absolute; left: 676px; top: 300px" class="not-in-preview"><img src="marker.png"></div></div>'
     ],
     className: "no-font-adjust",
     options: [
