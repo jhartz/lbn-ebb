@@ -22,7 +22,7 @@ ebb.plugins.push({
         '</tbody></table>',
         
         '<div class="title" style="font-size: 97px;">Radar</div>' +
-        '<div style="position: relative;"><div style="position: relative; overflow: hidden; width: 880px; height: 506px;"><img class="PLUGIN_weather_radar" style="margin-top: -40px;"></div><div style="position: absolute; left: 676px; top: 300px" class="not-in-preview"><img src="marker.png"></div></div>'
+        '<div style="position: relative;"><div style="position: relative; overflow: hidden; width: 880px; height: 506px;"><img class="PLUGIN_weather_radar" style="margin-top: -40px;"></div><div style="position: absolute; left: ' + PLUGIN_weather_marker[0] + 'px; top: ' + PLUGIN_weather_marker[1] + 'px" class="not-in-preview"><img src="marker.png"></div></div>'
     ],
     className: "no-font-adjust",
     options: [
@@ -36,20 +36,24 @@ ebb.plugins.push({
         PLUGIN_weather_showalerts = options["Show Severe Weather Alerts (yes/no)"].toLowerCase() == "yes";
         var script = document.createElement("script");
         script.type = "text/javascript";
-        script.src = "http://api.wunderground.com/api/9493a6a49a9d643a/alerts/conditions/forecast/hourly/q/19547.json?callback=PLUGIN_weather_jsonp";
+        script.src = "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/alerts/conditions/forecast/hourly/q/" + PLUGIN_weather_location + ".json?callback=PLUGIN_weather_jsonp";
         document.getElementsByTagName("head")[0].appendChild(script);
         
         ebb.send_update([
             {
                 className: "PLUGIN_weather_radar",
                 attributes: {
-                    src: "http://api.wunderground.com/api/9493a6a49a9d643a/animatedradar/q/19547.gif?radius=131&width=1365&height=785&rainsnow=1&timelabel=1&timelabel.x=50&timelabel.y=500&newmaps=1&timestamp_so_no_cache=" + (new Date()).getTime()
+                    src: "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/animatedradar/q/" + PLUGIN_weather_location + ".gif?radius=131&width=1365&height=785&rainsnow=1&timelabel=1&timelabel.x=50&timelabel.y=500&newmaps=1&timestamp_so_no_cache=" + (new Date()).getTime()
                 }
             }
         ]);
     },
     update_interval: 5 * 60 * 1000  // 5 min
 });
+
+if (typeof head != "undefined" && typeof head.js == "function") {
+    head.js("../custom/weather-settings.js");
+}
 
 function PLUGIN_weather_jsonp(data) {
     if (data.alerts.length > 0 && PLUGIN_weather_showalerts) {
