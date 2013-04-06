@@ -49,7 +49,6 @@ table.pretty td {
     padding: 15px;
     font-size: 10pt;
     border: 1px solid white;
-    text-align: center;
     vertical-align: top;
 }
 
@@ -78,9 +77,10 @@ table.pretty td {
 
 .pretty_title * {
     font-size: inherit !important;
-    float: inherit !important;
+    /* float: inherit !important; */
     width: auto !important;
     height: auto !important;
+    margin: auto !important;
 }
 
 .pretty_title table.pretty td {
@@ -96,6 +96,7 @@ table.pretty td {
 }
 
 .pretty_title .title {
+    text-align: center;
     text-decoration: underline;
 }
 
