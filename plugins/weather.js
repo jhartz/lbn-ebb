@@ -33,20 +33,22 @@ ebb.plugins.push({
         }
     ],
     update: function (options) {
-        PLUGIN_weather_showalerts = options["Show Severe Weather Alerts (yes/no)"].toLowerCase() == "yes";
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/alerts/conditions/forecast/hourly/q/" + PLUGIN_weather_location + ".json?callback=PLUGIN_weather_jsonp";
-        document.getElementsByTagName("head")[0].appendChild(script);
-        
-        ebb.send_update([
-            {
-                className: "PLUGIN_weather_radar",
-                attributes: {
-                    src: "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/animatedradar/q/" + PLUGIN_weather_location + ".gif?radius=131&width=1365&height=785&rainsnow=1&timelabel=1&timelabel.x=50&timelabel.y=500&newmaps=1&timestamp_so_no_cache=" + (new Date()).getTime()
+        if (typeof PLUGIN_weather_offhours == "undefined" || inArray((new Date()).getHours(), PLUGIN_weather_offhours)) {
+            PLUGIN_weather_showalerts = options["Show Severe Weather Alerts (yes/no)"].toLowerCase() == "yes";
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/alerts/conditions/forecast/hourly/q/" + PLUGIN_weather_location + ".json?callback=PLUGIN_weather_jsonp";
+            document.getElementsByTagName("head")[0].appendChild(script);
+            
+            ebb.send_update([
+                {
+                    className: "PLUGIN_weather_radar",
+                    attributes: {
+                        src: "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/animatedradar/q/" + PLUGIN_weather_location + ".gif?radius=131&width=1365&height=785&rainsnow=1&timelabel=1&timelabel.x=50&timelabel.y=500&newmaps=1&timestamp_so_no_cache=" + (new Date()).getTime()
+                    }
                 }
-            }
-        ]);
+            ]);
+        }
     },
     update_interval: 10 * 60 * 1000  // 10 min
 });

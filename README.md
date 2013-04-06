@@ -16,9 +16,13 @@ Files you need to add yourself:
 
 `custom/weather-settings.js` should look something like this:
 
-    // wunderground.com API KEY
+    // wunderground.com API KEY (required)
     var PLUGIN_weather_apikey = "...";
-    // location zip code
-    var PLUGIN_weather_location = "...";
+    
+    // location zip code (required)
+    var PLUGIN_weather_location = "12345";
+    
+    // off-hours (optional) ... if (new Date()).getHours() is in this array, don't update weather
+    var PLUGIN_weather_offhours = [22, 23, 0, 1, 2, 3, 4, 5];
 
 For other radar map-related settings, you'll have to change them directly in plugins/weather.js
