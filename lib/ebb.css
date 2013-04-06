@@ -77,10 +77,13 @@ table.pretty td {
 
 .pretty_title * {
     font-size: inherit !important;
-    /* float: inherit !important; */
     width: auto !important;
     height: auto !important;
     margin: auto !important;
+}
+
+.pretty_title *:not(img) {
+    float: inherit !important;
 }
 
 .pretty_title table.pretty td {
