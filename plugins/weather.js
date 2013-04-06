@@ -50,7 +50,7 @@ ebb.plugins.push({
             ]);
         }
     },
-    update_interval: 10 * 60 * 1000  // 10 min
+    update_interval: 15 * 60 * 1000  // 15 min
 });
 
 if (typeof head != "undefined" && typeof head.js == "function") {
