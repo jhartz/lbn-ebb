@@ -33,7 +33,7 @@ ebb.plugins.push({
         }
     ],
     update: function (options) {
-        if (typeof PLUGIN_weather_offhours == "undefined" || inArray((new Date()).getHours(), PLUGIN_weather_offhours)) {
+        if (typeof PLUGIN_weather_offhours == "undefined" || !inArray((new Date()).getHours(), PLUGIN_weather_offhours)) {
             PLUGIN_weather_showalerts = options["Show Severe Weather Alerts (yes/no)"].toLowerCase() == "yes";
             var script = document.createElement("script");
             script.type = "text/javascript";
