@@ -1,8 +1,7 @@
 ebb.plugins.push({
     name: "Title",
-    type: "html",
     description: "The LBN\nElectronic Bulletin Board",
-    content: '<img src="../custom/title.png" style="width: 100%; height: 100%;">',
+    content: ['<img src="../custom/title.png" style="width: 100%; height: 100%;">'],
     className: "no-font-adjust",
     noborder: true,
     position: {

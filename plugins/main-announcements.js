@@ -1,10 +1,13 @@
 ebb.plugins.push({
     name: "Main Announcements",
-    content: "$%%$LBNEBB_PLUGIN_VAR1%%%##",
+    content: {
+        template: "$1",
+        variable: "$1"
+    },
     options: [{
         name: "Content",
-        type: "textarea",
-        variable: "$%%$LBNEBB_PLUGIN_VAR1%%%##",
+        type: "filteredtextarea",
+        variable: "$1",
         value: ""
     }]
 });

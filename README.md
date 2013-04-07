@@ -4,6 +4,12 @@
 
 Open the `bulletinboard.html` file. Enter settings, then click "Go". If you use a second desktop or monitor for presenting, set up the second window in your second desktop. When ready and fullscreen, click "Continue". If the presentation window is in a separate desktop from the original window, you can control the presentation using the controls in the original window.
 
+## Plugins
+
+Plugins are modules that define the slides on the LBN Electronic Bulletin Board. Each plugin is defined by a JavaScript file in the `plugins` directory. The `plugins.js` file defines the enabled plugins and their order in the Bulletin Board.
+
+For more info on the plugin definition files, see `plugins/README.md`.
+
 ## Settings
 
 Files you need to add yourself:

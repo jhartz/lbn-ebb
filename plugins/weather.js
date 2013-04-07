@@ -1,8 +1,7 @@
-PLUGIN_weather_showalerts = false;
+var PLUGIN_weather_showalerts = false;
 
 ebb.plugins.push({
     name: "Weather",
-    type: "html",
     content: [
         '<div class="title PLUGIN_weather_currentconditions" style="font-size: 97px;">Current Conditions</div>' +
         '<div style="text-align: center; font-size: 95px;"><img class="img PLUGIN_weather_icon"><br><span class="PLUGIN_weather_status">DNE</span><br><span class="PLUGIN_weather_temp">DNE</span>&deg;</span></div>',
@@ -28,13 +27,13 @@ ebb.plugins.push({
     options: [
         {
             name: "Show Severe Weather Alerts (yes/no)",
-            type: "text",
-            value: "yes"
+            type: "bool",
+            value: false
         }
     ],
     update: function (options) {
         if (typeof PLUGIN_weather_offhours == "undefined" || !inArray((new Date()).getHours(), PLUGIN_weather_offhours)) {
-            PLUGIN_weather_showalerts = options["Show Severe Weather Alerts (yes/no)"].toLowerCase() == "yes";
+            PLUGIN_weather_showalerts = options["Show Severe Weather Alerts (yes/no)"];
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.src = "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/alerts/conditions/forecast/hourly/q/" + PLUGIN_weather_location + ".json?callback=PLUGIN_weather_jsonp";
@@ -58,259 +57,260 @@ if (typeof head != "undefined" && typeof head.js == "function") {
 }
 
 function PLUGIN_weather_jsonp(data) {
-    if (data.alerts.length > 0 && PLUGIN_weather_showalerts) {
-        // severe weather alerts
-        var alertness = '<marquee bgcolor="red" style="width: 100%;">';
-        var nostarted = true;
-        for (var alert_i = 0; alert_i < data.alerts.length; alert_i++) {
-            if (nostarted) {
-                nostarted = false;
-            } else {
-                alertness += ';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    if (data) {
+        if (data.alerts && data.alerts.length > 0 && PLUGIN_weather_showalerts) {
+            // severe weather alerts
+            var alertness = '<marquee bgcolor="red" style="width: 100%;">';
+            var nostarted = true;
+            for (var alert_i = 0; alert_i < data.alerts.length; alert_i++) {
+                if (nostarted) {
+                    nostarted = false;
+                } else {
+                    alertness += ';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                }
+                alertness += '<strong>' + escHTML(data.alerts[alert_i].description) + ':&nbsp;</strong>' + escHTML(data.alerts[alert_i].message);
             }
-            alertness += '<strong>' + escHTML(data.alerts[alert_i].description) + ':&nbsp;</strong>' + escHTML(data.alerts[alert_i].message);
+            alertness += '</marquee>';
+            ebb.send_update([
+                {
+                    className: "lbn-weather-alerts",
+                    html: alertness,
+                    style: {
+                        display: "block"
+                    }
+                }
+            ]);
+        } else {
+            ebb.send_update([
+                {
+                    className: "lbn-weather-alerts",
+                    html: "",
+                    style: {
+                        display: "none"
+                    }
+                }
+            ]);
         }
-        alertness += '</marquee>';
-        ebb.send_update([
-            {
-                className: "lbn-weather-alerts",
-                html: alertness,
-                style: {
-                    display: "block"
-                }
+        
+        // Indexes in data.forecast.txt_forecast.forecastday (since it includes nights too)
+        var forecast_indexes = [];
+        var forecast_index = 1;  // skip the first one (today or tonight)
+        for (var i = 1; i <= 3; i++) {
+            while (data.forecast.txt_forecast.forecastday[forecast_index].title.toLowerCase().indexOf("night") != -1) {
+                forecast_index++;
             }
-        ]);
-    } else {
-        ebb.send_update([
-            {
-                className: "lbn-weather-alerts",
-                html: "",
-                style: {
-                    display: "none"
-                }
-            }
-        ]);
-    }
-    
-    // Indexes in data.forecast.txt_forecast.forecastday (since it includes nights too)
-    var forecast_indexes = [];
-    var forecast_index = 1;  // skip the first one (today or tonight)
-    for (var i = 1; i <= 3; i++) {
-        while (data.forecast.txt_forecast.forecastday[forecast_index].title.toLowerCase().indexOf("night") != -1) {
+            forecast_indexes.push([forecast_index, data.forecast.txt_forecast.forecastday[forecast_index].title.toLowerCase()]);
             forecast_index++;
         }
-        forecast_indexes.push([forecast_index, data.forecast.txt_forecast.forecastday[forecast_index].title.toLowerCase()]);
-        forecast_index++;
-    }
-    var txt_forecast1 = forecast_indexes[0][0],
-        txt_forecast2 = forecast_indexes[1][0],
-        txt_forecast3 = forecast_indexes[2][0];
-    
-    // Indexes in data.forecast.simpleforecast.forecastday
-    // (sync them up to txt_forecast indexes)
-    var simpleforecast_indexes = [];
-    for (var j = 0; j < data.forecast.simpleforecast.forecastday.length; j++) {
-        var myday = data.forecast.simpleforecast.forecastday[j].date.weekday.toLowerCase();
-        for (var k = 0; k < forecast_indexes.length; k++) {
-            if (forecast_indexes[k][1] == myday) {
-                simpleforecast_indexes.push(j);
+        var txt_forecast1 = forecast_indexes[0][0],
+            txt_forecast2 = forecast_indexes[1][0],
+            txt_forecast3 = forecast_indexes[2][0];
+        
+        // Indexes in data.forecast.simpleforecast.forecastday
+        // (sync them up to txt_forecast indexes)
+        var simpleforecast_indexes = [];
+        for (var j = 0; j < data.forecast.simpleforecast.forecastday.length; j++) {
+            var myday = data.forecast.simpleforecast.forecastday[j].date.weekday.toLowerCase();
+            for (var k = 0; k < forecast_indexes.length; k++) {
+                if (forecast_indexes[k][1] == myday) {
+                    simpleforecast_indexes.push(j);
+                }
             }
         }
+        var simpleforecast1 = simpleforecast_indexes[0],
+            simpleforecast2 = simpleforecast_indexes[1],
+            simpleforecast3 = simpleforecast_indexes[2];
+        
+        // Update background images
+        PLUGIN_weather_bgimg(data.current_observation.weather, "PLUGIN_weather_currentconditions", data.current_observation.icon);
+        //PLUGIN_weather_bgimg("next few hours", "PLUGIN_weather_nextfewhours");
+        //PLUGIN_weather_bgimg(data.forecast.simpleforecast.forecastday[simpleforecast1].conditions, "PLUGIN_weather_nextfewdays", data.forecast.simpleforecast.forecastday[simpleforecast1].icon);
+        
+        // Update slide data
+        ebb.send_update([
+            // current observations
+            {
+                className: "PLUGIN_weather_icon",
+                attributes: {
+                    src: data.current_observation.icon_url
+                }
+            },
+            {
+                className: "PLUGIN_weather_status",
+                text: data.current_observation.weather
+            },
+            {
+                className: "PLUGIN_weather_temp",
+                text: data.current_observation.temp_f
+            },
+            
+            // hourly forecast
+            {
+                className: "PLUGIN_weather_hourly_title1",
+                text: data.hourly_forecast[0].FCTTIME.civil
+            },
+            {
+                className: "PLUGIN_weather_hourly_title2",
+                text: data.hourly_forecast[1].FCTTIME.civil
+            },
+            {
+                className: "PLUGIN_weather_hourly_title3",
+                text: data.hourly_forecast[2].FCTTIME.civil
+            },
+            
+            {
+                className: "PLUGIN_weather_hourly_img1",
+                attributes: {
+                    src: data.hourly_forecast[0].icon_url
+                }
+            },
+            {
+                className: "PLUGIN_weather_hourly_img2",
+                attributes: {
+                    src: data.hourly_forecast[1].icon_url
+                }
+            },
+            {
+                className: "PLUGIN_weather_hourly_img3",
+                attributes: {
+                    src: data.hourly_forecast[2].icon_url
+                }
+            },
+            
+            {
+                className: "PLUGIN_weather_hourly_status1",
+                text: data.hourly_forecast[0].wx || data.hourly_forecast[0].condition
+            },
+            {
+                className: "PLUGIN_weather_hourly_status2",
+                text: data.hourly_forecast[1].wx || data.hourly_forecast[1].condition
+            },
+            {
+                className: "PLUGIN_weather_hourly_status3",
+                text: data.hourly_forecast[2].wx || data.hourly_forecast[2].condition
+            },
+            
+            {
+                className: "PLUGIN_weather_hourly_temp1",
+                text: data.hourly_forecast[0].temp.english
+            },
+            {
+                className: "PLUGIN_weather_hourly_temp2",
+                text: data.hourly_forecast[1].temp.english
+            },
+            {
+                className: "PLUGIN_weather_hourly_temp3",
+                text: data.hourly_forecast[2].temp.english
+            },
+            
+            {
+                className: "PLUGIN_weather_hourly_feelslike1",
+                text: data.hourly_forecast[0].feelslike.english
+            },
+            {
+                className: "PLUGIN_weather_hourly_feelslike2",
+                text: data.hourly_forecast[1].feelslike.english
+            },
+            {
+                className: "PLUGIN_weather_hourly_feelslike3",
+                text: data.hourly_forecast[2].feelslike.english
+            },
+            
+            {
+                className: "PLUGIN_weather_hourly_feelslike_container1",
+                style: {
+                    display: (data.hourly_forecast[0].feelslike.english && data.hourly_forecast[0].feelslike.english != data.hourly_forecast[0].temp.english) ? "" : "none"
+                }
+            },
+            
+            {
+                className: "PLUGIN_weather_hourly_feelslike_container2",
+                style: {
+                    display: (data.hourly_forecast[1].feelslike.english && data.hourly_forecast[1].feelslike.english != data.hourly_forecast[1].temp.english) ? "" : "none"
+                }
+            },
+            
+            {
+                className: "PLUGIN_weather_hourly_feelslike_container3",
+                style: {
+                    display: (data.hourly_forecast[2].feelslike.english && data.hourly_forecast[2].feelslike.english != data.hourly_forecast[2].temp.english) ? "" : "none"
+                }
+            },
+            
+            // 3-day forecast
+            {
+                className: "PLUGIN_weather_forecast_day1",
+                text: data.forecast.txt_forecast.forecastday[txt_forecast1].title
+            },
+            {
+                className: "PLUGIN_weather_forecast_day2",
+                text: data.forecast.txt_forecast.forecastday[txt_forecast2].title
+            },
+            {
+                className: "PLUGIN_weather_forecast_day3",
+                text: data.forecast.txt_forecast.forecastday[txt_forecast3].title
+            },
+            
+            {
+                className: "PLUGIN_weather_forecast_img1",
+                attributes: {
+                    src: data.forecast.txt_forecast.forecastday[txt_forecast1].icon_url
+                }
+            },
+            {
+                className: "PLUGIN_weather_forecast_img2",
+                attributes: {
+                    src: data.forecast.txt_forecast.forecastday[txt_forecast2].icon_url
+                }
+            },
+            {
+                className: "PLUGIN_weather_forecast_img3",
+                attributes: {
+                    src: data.forecast.txt_forecast.forecastday[txt_forecast3].icon_url
+                }
+            },
+            
+            {
+                className: "PLUGIN_weather_forecast_status1",
+                text: data.forecast.txt_forecast.forecastday[txt_forecast1].fcttext.substring(0, data.forecast.txt_forecast.forecastday[txt_forecast1].fcttext.indexOf("."))
+            },
+            {
+                className: "PLUGIN_weather_forecast_status2",
+                text: data.forecast.txt_forecast.forecastday[txt_forecast2].fcttext.substring(0, data.forecast.txt_forecast.forecastday[txt_forecast2].fcttext.indexOf("."))
+            },
+            {
+                className: "PLUGIN_weather_forecast_status3",
+                text: data.forecast.txt_forecast.forecastday[txt_forecast3].fcttext.substring(0, data.forecast.txt_forecast.forecastday[txt_forecast3].fcttext.indexOf("."))
+            },
+            
+            {
+                className: "PLUGIN_weather_forecast_high1",
+                text: data.forecast.simpleforecast.forecastday[simpleforecast1].high.fahrenheit
+            },
+            {
+                className: "PLUGIN_weather_forecast_high2",
+                text: data.forecast.simpleforecast.forecastday[simpleforecast2].high.fahrenheit
+            },
+            {
+                className: "PLUGIN_weather_forecast_high3",
+                text: data.forecast.simpleforecast.forecastday[simpleforecast3].high.fahrenheit
+            },
+            
+            
+            {
+                className: "PLUGIN_weather_forecast_low1",
+                text: data.forecast.simpleforecast.forecastday[simpleforecast1].low.fahrenheit
+            },
+            {
+                className: "PLUGIN_weather_forecast_low2",
+                text: data.forecast.simpleforecast.forecastday[simpleforecast2].low.fahrenheit
+            },
+            {
+                className: "PLUGIN_weather_forecast_low3",
+                text: data.forecast.simpleforecast.forecastday[simpleforecast3].low.fahrenheit
+            }
+        ]);
     }
-    var simpleforecast1 = simpleforecast_indexes[0],
-        simpleforecast2 = simpleforecast_indexes[1],
-        simpleforecast3 = simpleforecast_indexes[2];
-    
-    // Update background images
-    PLUGIN_weather_bgimg(data.current_observation.weather, "PLUGIN_weather_currentconditions", data.current_observation.icon);
-    //PLUGIN_weather_bgimg("next few hours", "PLUGIN_weather_nextfewhours");
-    //PLUGIN_weather_bgimg(data.forecast.simpleforecast.forecastday[simpleforecast1].conditions, "PLUGIN_weather_nextfewdays", data.forecast.simpleforecast.forecastday[simpleforecast1].icon);
-    
-    // Update slide data
-    ebb.send_update([
-        // current observations
-        {
-            className: "PLUGIN_weather_icon",
-            attributes: {
-                src: data.current_observation.icon_url
-            }
-        },
-        {
-            className: "PLUGIN_weather_status",
-            text: data.current_observation.weather
-        },
-        {
-            className: "PLUGIN_weather_temp",
-            text: data.current_observation.temp_f
-        },
-        
-        // hourly forecast
-        {
-            className: "PLUGIN_weather_hourly_title1",
-            text: data.hourly_forecast[0].FCTTIME.civil
-        },
-        {
-            className: "PLUGIN_weather_hourly_title2",
-            text: data.hourly_forecast[1].FCTTIME.civil
-        },
-        {
-            className: "PLUGIN_weather_hourly_title3",
-            text: data.hourly_forecast[2].FCTTIME.civil
-        },
-        
-        {
-            className: "PLUGIN_weather_hourly_img1",
-            attributes: {
-                src: data.hourly_forecast[0].icon_url
-            }
-        },
-        {
-            className: "PLUGIN_weather_hourly_img2",
-            attributes: {
-                src: data.hourly_forecast[1].icon_url
-            }
-        },
-        {
-            className: "PLUGIN_weather_hourly_img3",
-            attributes: {
-                src: data.hourly_forecast[2].icon_url
-            }
-        },
-        
-        {
-            className: "PLUGIN_weather_hourly_status1",
-            text: data.hourly_forecast[0].wx || data.hourly_forecast[0].condition
-        },
-        {
-            className: "PLUGIN_weather_hourly_status2",
-            text: data.hourly_forecast[1].wx || data.hourly_forecast[1].condition
-        },
-        {
-            className: "PLUGIN_weather_hourly_status3",
-            text: data.hourly_forecast[2].wx || data.hourly_forecast[2].condition
-        },
-        
-        {
-            className: "PLUGIN_weather_hourly_temp1",
-            text: data.hourly_forecast[0].temp.english
-        },
-        {
-            className: "PLUGIN_weather_hourly_temp2",
-            text: data.hourly_forecast[1].temp.english
-        },
-        {
-            className: "PLUGIN_weather_hourly_temp3",
-            text: data.hourly_forecast[2].temp.english
-        },
-        
-        {
-            className: "PLUGIN_weather_hourly_feelslike1",
-            text: data.hourly_forecast[0].feelslike.english
-        },
-        {
-            className: "PLUGIN_weather_hourly_feelslike2",
-            text: data.hourly_forecast[1].feelslike.english
-        },
-        {
-            className: "PLUGIN_weather_hourly_feelslike3",
-            text: data.hourly_forecast[2].feelslike.english
-        },
-        
-        {
-            className: "PLUGIN_weather_hourly_feelslike_container1",
-            style: {
-                display: (data.hourly_forecast[0].feelslike.english && data.hourly_forecast[0].feelslike.english != data.hourly_forecast[0].temp.english) ? "" : "none"
-            }
-        },
-        
-        {
-            className: "PLUGIN_weather_hourly_feelslike_container2",
-            style: {
-                display: (data.hourly_forecast[1].feelslike.english && data.hourly_forecast[1].feelslike.english != data.hourly_forecast[1].temp.english) ? "" : "none"
-            }
-        },
-        
-        {
-            className: "PLUGIN_weather_hourly_feelslike_container3",
-            style: {
-                display: (data.hourly_forecast[2].feelslike.english && data.hourly_forecast[2].feelslike.english != data.hourly_forecast[2].temp.english) ? "" : "none"
-            }
-        },
-        
-        // 3-day forecast
-        {
-            className: "PLUGIN_weather_forecast_day1",
-            text: data.forecast.txt_forecast.forecastday[txt_forecast1].title
-        },
-        {
-            className: "PLUGIN_weather_forecast_day2",
-            text: data.forecast.txt_forecast.forecastday[txt_forecast2].title
-        },
-        {
-            className: "PLUGIN_weather_forecast_day3",
-            text: data.forecast.txt_forecast.forecastday[txt_forecast3].title
-        },
-        
-        {
-            className: "PLUGIN_weather_forecast_img1",
-            attributes: {
-                src: data.forecast.txt_forecast.forecastday[txt_forecast1].icon_url
-            }
-        },
-        {
-            className: "PLUGIN_weather_forecast_img2",
-            attributes: {
-                src: data.forecast.txt_forecast.forecastday[txt_forecast2].icon_url
-            }
-        },
-        {
-            className: "PLUGIN_weather_forecast_img3",
-            attributes: {
-                src: data.forecast.txt_forecast.forecastday[txt_forecast3].icon_url
-            }
-        },
-        
-        {
-            className: "PLUGIN_weather_forecast_status1",
-            text: data.forecast.txt_forecast.forecastday[txt_forecast1].fcttext.substring(0, data.forecast.txt_forecast.forecastday[txt_forecast1].fcttext.indexOf("."))
-        },
-        {
-            className: "PLUGIN_weather_forecast_status2",
-            text: data.forecast.txt_forecast.forecastday[txt_forecast2].fcttext.substring(0, data.forecast.txt_forecast.forecastday[txt_forecast2].fcttext.indexOf("."))
-        },
-        {
-            className: "PLUGIN_weather_forecast_status3",
-            text: data.forecast.txt_forecast.forecastday[txt_forecast3].fcttext.substring(0, data.forecast.txt_forecast.forecastday[txt_forecast3].fcttext.indexOf("."))
-        },
-        
-        {
-            className: "PLUGIN_weather_forecast_high1",
-            text: data.forecast.simpleforecast.forecastday[simpleforecast1].high.fahrenheit
-        },
-        {
-            className: "PLUGIN_weather_forecast_high2",
-            text: data.forecast.simpleforecast.forecastday[simpleforecast2].high.fahrenheit
-        },
-        {
-            className: "PLUGIN_weather_forecast_high3",
-            text: data.forecast.simpleforecast.forecastday[simpleforecast3].high.fahrenheit
-        },
-        
-        
-        {
-            className: "PLUGIN_weather_forecast_low1",
-            text: data.forecast.simpleforecast.forecastday[simpleforecast1].low.fahrenheit
-        },
-        {
-            className: "PLUGIN_weather_forecast_low2",
-            text: data.forecast.simpleforecast.forecastday[simpleforecast2].low.fahrenheit
-        },
-        {
-            className: "PLUGIN_weather_forecast_low3",
-            text: data.forecast.simpleforecast.forecastday[simpleforecast3].low.fahrenheit
-        },
-        
-    ]);
 }
 
 function PLUGIN_weather_bgimg(condition, className, alternate) {

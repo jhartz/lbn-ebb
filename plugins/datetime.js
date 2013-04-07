@@ -3,8 +3,7 @@ var PLUGIN_datetime_months = ["January", "February", "March", "April", "May", "J
 
 ebb.plugins.push({
     name: "Date/Time",
-    type: "html",
-    content: '<span class="PLUGIN_datetime_date" style="float: left;"></span> <span class="PLUGIN_datetime_time" style="white-space: nowrap; float: right;"></span>',
+    content: ['<span class="PLUGIN_datetime_date" style="float: left;"></span> <span class="PLUGIN_datetime_time" style="white-space: nowrap; float: right;"></span>'],
     className: "mini no-font-adjust front",
     position: {
         x: 800,

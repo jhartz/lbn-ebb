@@ -1,22 +1,10 @@
 ebb.plugins.push({
     name: "BCTC Schedule",
-    content: {
-        "Students attending BCTC East A.M.": [
-            "Arrive at High School by $$%1A",
-            "Bus Departs High School at $$%1B",
-            "Arrive back to High School at $$%1C"
-        ],
-        "Students attending BCTC West A.M.": [
-            "Arrive at Middle School by $$%2A",
-            "Bus departs Middle School at $$%2B",
-            "Arrive back to Middle School at $$%2C"
-        ],
-        "Students attending BCTC East P.M.": [
-            "Arrive at High School by $$%3A",
-            "Depart High School at $$%3B",
-            "Arrive back to High School at $$%3C"
-        ]
-    },
+    content: [
+        '<div class="title">Students attending BCTC East A.M.</div><ul><li>Arrive at High School by $$%1A</li><li>Bus Departs High School at $$%1B</li><li>Arrive back to High School at $$%1C</li></ul>',
+        '<div class="title">Students attending BCTC West A.M.</div><ul><li>Arrive at Middle School by $$%2A</li><li>Bus departs Middle School at $$%2B</li><li>Arrive back to Middle School at $$%2C</li></ul>',
+        '<div class="title">Students attending BCTC East P.M.</div><ul><li>Arrive at High School by $$%3A</li><li>Depart High School at $$%3B</li><li>Arrive back to High School at $$%3C</li></ul>'
+    ],
     options: [
         {
             name: "East AM - arrive at HS by",

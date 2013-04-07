@@ -1,11 +1,13 @@
 ebb.plugins.push({
     name: "Sports Announcements",
-    slidetitle: "Sports",
-    content: "$%%$LBNEBB_PLUGIN_VAR1%%%##",
+    content: {
+        template: '<div class="title">Sports</div>$1',
+        variable: "$1"
+    },
     options: [{
         name: "Content",
-        type: "textarea",
-        variable: "$%%$LBNEBB_PLUGIN_VAR1%%%##",
+        type: "filteredtextarea",
+        variable: "$1",
         value: ""
     }]
 });
