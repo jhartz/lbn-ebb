@@ -100,6 +100,7 @@ table.pretty td {
 
 .pretty_title img {
     max-width: 300px;
+    max-height: 175px;
 }
 
 .pretty_title .not-in-preview {
