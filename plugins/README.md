@@ -3,7 +3,6 @@
 These files are referenced by the LBN Electronic Bulletin Board if they are listed in `plugins.js` in the root directory. When executed, the plugin file should append a JavaScript object to an array `ebb.plugins`. This object, called a *plugin definition* below, should have these properties:
 
 - `name` (required) - string - a name for the plugin; must be unique
-- `description` (optional) - string - a description for the plugin that is used in place of the plugin's content in the preview on the control page
 - `content` (required) - the HTML of the content (see "Defining Slide Content" below)
 - `className` (optional) - string - any extra CSS classes to apply to the slide(s) for this plugin
 - `position` (optional) - string - a custom position in the 3D space that holds the slides in the presentation; only define this if you know what you're doing! (example in `title.js` and `datetime.js`)
