@@ -52,7 +52,7 @@ table.pretty {
     padding: 0;
 }
 
-table.pretty td {
+table.pretty td:not(.notpretty) {
     margin: 0;
     padding: 15px;
     font-size: 10pt;
