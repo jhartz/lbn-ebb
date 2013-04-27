@@ -46,6 +46,44 @@ code {
     cursor: default;
 }
 
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#header ul {
+    list-style-type: none;
+    margin: -4px 0 0 0;
+    padding: 3px;
+}
+
+#header ul > :not(li) {
+    display: none;
+}
+
+#header li {
+    display: inline;
+    margin: 0;
+    padding: 10px 13px;
+    background-color: #0A038C;
+    border-left: 1px solid white;
+    border-bottom: 1px solid white;
+    line-height: 239%;
+}
+
+#header li:first-child {
+    border-radius: 0 0 0 9px;
+}
+
+#header li:last-child {
+    border-radius: 0 0 9px 0;
+    border-right: 1px solid white;
+}
+
 table.pretty {
     border-collapse: collapse;
     margin: 0;
