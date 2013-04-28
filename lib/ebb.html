@@ -12,17 +12,16 @@ that can be found in the LICENSE.txt file.
 <script type="text/javascript" src="../plugins.js"></script>
 <script type="text/javascript" src="head.load.min.js"></script>
 <script type="text/javascript" src="util.js"></script>
-
 <script type="text/javascript">
 var ebb = {
     plugins: [],
     send_update: function () {}
 };
-</script>
-<script type="text/javascript" src="ebb.input.js"></script>
-<script type="text/javascript" src="ebb.options.js"></script>
-<script type="text/javascript" src="ebb.control.js"></script>
-<script type="text/javascript">
+
+head.js("ebb.input.js");
+head.js("ebb.options.js");
+head.js("ebb.control.js");
+
 forEach(plugin_list, function (plugin) {
     head.js("../plugins/" + plugin);
 });
