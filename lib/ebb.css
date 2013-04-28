@@ -40,6 +40,7 @@ code {
 
 .panel h1, .panel h2, .panel h3 {
     text-decoration: underline;
+    text-shadow: 2px 2px 1px #0A038C;
 }
 
 #control {
