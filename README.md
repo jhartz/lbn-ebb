@@ -20,7 +20,7 @@ Files you need to add yourself:
 - `custom/title.png` - a title slide; should be about 720x540
 - `custom/weather-settings.js` - settings for the weather info (location, API key); see below
 - `custom/weather-images/...` (clear.jpg, cloudy.jpg, foggy.jpg, icy.jpg, mcloudy.jpg, ptcloudy.jpg, rainy.jpg, snow.jpg, thunder.jpg, wintmix.jpg) - backgrounds for the "Current Conditions" slide (changes automatically based on current conditions); you can modify the `PLUGIN_weather_bgimg` function in `plugins/weather.js` to change this around, depending on your image set
-- `custom/LBN EBB Optionifier.zip` - a compiled version of the LBN EBB Optionifier (if you choose to use it); this is linked to in ebb.html; see [github.com/jhartz/lbn-ebb-optionifier](https://github.com/jhartz/lbn-ebb-optionifier)
+- `custom/LBN EBB Optionifier.zip` - a compiled version of the LBN EBB Optionifier (if you choose to use it). This is linked to in `lib/ebb.html`; to disable the link and info, set `ebb.input.LEO_INPUT_ENABLED` to `false` in `lib/ebb.input.js`. See [github.com/jhartz/lbn-ebb-optionifier](https://github.com/jhartz/lbn-ebb-optionifier) for more on the LBN EBB Optionifier.
 
 `custom/weather-settings.js` should look something like this:
 
