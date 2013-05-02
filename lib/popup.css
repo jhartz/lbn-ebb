@@ -134,7 +134,7 @@ table.pretty td {
     border: 3px solid black;
     text-align: center;
     vertical-align: top;
-    font-size: 34px;
+    font-size: 36px;
 }
 
 table.tri td {
@@ -149,5 +149,11 @@ table.pretty th {
 }
 
 table.pretty tr.midget td {
-    font-size: 30px;
+    font-size: 31px;
+}
+
+table.pretty td .squished {
+    line-height: 135%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
