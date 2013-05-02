@@ -87,7 +87,7 @@ head.ready(function () {
     <div id="options_filterSyntax" style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, .8); overflow: auto;">
         <table style="width: 100%; height: 100%;"><tbody>
             <tr><td>
-                <div class="panel" style="width: 60%; margin: auto; background-color: black;">
+                <div class="panel fancycode" style="width: 60%; margin: auto; background-color: black;">
                     <h3>Filter Syntax</h3>
                     <div style="margin-left: 50px; text-indent: -20px;">
                         <p><code>[[b]]</code> <b>bold</b> <code>[[/b]]</code></p>
@@ -100,7 +100,8 @@ head.ready(function () {
                         <p><code>[[img]]</code> url of image <code>[[/img]]</code> <span style="margin-left: 16px;">(results in left-aligned image)</span></p>
                         <p><code>[[rightimg]]</code> url of image <code>[[/rightimg]]</code> <span style="margin-left: 16px;">(results in right-aligned image)</span></p>
                     </div>
-                    <p>Additionally, "Anchor #" and "Sports #" will be trimmed from the beginning of the line.</p>
+                    <p>Additionally, <code>Anchor #</code> and <code>Sports #</code> (where <code>#</code> is an optional number) will be trimmed from the beginning of the line.</p>
+                    <p>Any line beginning with <code>####</code> (4 number signs in a row) will be treated as a comment and removed.</p>
                     <p style="text-align: right;"><span id="options_filterSyntax_close" class="link">Close</span></p>
                 </div>
             </td></tr>
