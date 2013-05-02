@@ -26,6 +26,12 @@ code {
     font-family: Consolas, "Liberation Mono", Courier, monospace;
 }
 
+.fancycode code, code.fancycode {
+    background-color: #00007A;
+    border-radius: 3px;
+    padding: 2px;
+}
+
 .noscroll {
     overflow: hidden;
 }
