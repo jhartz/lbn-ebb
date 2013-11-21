@@ -1,5 +1,7 @@
 # LBN Electronic Bulletin Board
 
+https://github.com/jhartz/lbn-ebb
+
 The LBN Electronic Bulletin Board is a browser-based system for creating a beautiful and dynamic information slideshow, perfect for showing on a public TV or display. Start with the example content, then modify or create your own plugins to customize it to fit your needs!
 
 ## Basic Usage
