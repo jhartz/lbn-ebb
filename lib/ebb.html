@@ -43,9 +43,16 @@ head.ready(function () {
         
         ebb.input.start();
     } else {
+        document.getElementById("intro").setAttribute("data-changed", "1");
         document.getElementById("intro").innerHTML = '<h1>ERROR: Necessary JavaScript features not found.</h1><p>Please upgrade to a newer browser.</p>';
     }
 });
+
+window.onload = function () {
+    if (document.getElementById("intro").getAttribute("data-changed") != "1") {
+        document.getElementById("intro").innerHTML = '<h1>Loading...</h1><p>If this is taking too long, make sure all the files in the "custom" directory are set up correctly (see "README.md" for more).';
+    }
+};
 </script>
 </head>
 
@@ -131,5 +138,7 @@ head.ready(function () {
         <tr><td style="text-align: center; font-size: 50pt;"><span id="control_loading_content">Waiting...</span></td></tr>
     </tbody></table>
 </div>
+
+<div id="copyright" style="text-align: center; font-style: italic;"><a href="https://github.com/jhartz/lbn-ebb">LBN Electronic Bulletin Board</a><br><small>Copyright (c) 2014, Jake Hartz. All rights reserved.</small></div>
 </body>
 </html>
