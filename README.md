@@ -1,6 +1,6 @@
 # LBN Electronic Bulletin Board
 
-[comment]: <> (NOTE: Be sure to update the version number in lib/util.js when you update it here!!)
+<!-- NOTE: Be sure to update the version number in lib/util.js when you update it here!! -->
 
 *Version 1.0.0pre*
 
