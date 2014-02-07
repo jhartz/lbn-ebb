@@ -1,6 +1,8 @@
 # LBN Electronic Bulletin Board
 
-Version 1.0.0
+[comment]: <> (NOTE: Be sure to update the version number in lib/util.js when you update it here!!)
+
+*Version 1.0.0pre*
 
 https://github.com/jhartz/lbn-ebb
 
