@@ -6,7 +6,7 @@ ebb.plugins.push({
     options: [
         {
             name: "Lunch",
-            type: "filteredtextarea",
+            type: "formattedtextarea",
             variable: "$$%LBNEBB_PLUGIN_VAR1@@#"
         }
     ]

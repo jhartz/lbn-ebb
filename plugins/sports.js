@@ -6,7 +6,7 @@ ebb.plugins.push({
     },
     options: [{
         name: "Content",
-        type: "filteredtextarea",
+        type: "formattedtextarea",
         variable: "$1",
         value: ""
     }]

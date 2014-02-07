@@ -51,7 +51,7 @@ The value of `type` must be one of the following:
 - `bool` - checkbox (value is true or false)
 - `text` - one-line textbox (shown as entered, all HTML is escaped)
 - `textarea` - multi-line textarea (shown as entered, all HTML is escaped)
-- `filteredtextarea` - multi-line textarea (input filtered - see filter code in util.js)
+- `formattedtextarea` - multi-line textarea (allows for formatting using special syntax)
 - `html` - multi-line textarea (HTML not escaped)
 
 To use the values for these options, include an option's variable in the plugin definiton's `content` or use the object passed to the `update` function in the plugin's definition.
