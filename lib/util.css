@@ -1,0 +1,14 @@
+/*
+Copyright (c) 2013, Jake Hartz. All rights reserved.
+Use of this source code is governed by a BSD-style license
+that can be found in the LICENSE.txt file.
+*/
+
+img.logo {
+    border-radius: 4px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .4);
+    border: 1px solid rgba(255, 255, 255, .4);
+    background-color: #28009B;
+    width: 72px;
+    height: 65px;
+}

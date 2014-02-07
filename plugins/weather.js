@@ -32,28 +32,30 @@ ebb.plugins.push({
         }
     ],
     update: function (options) {
-        if (typeof PLUGIN_weather_offhours == "undefined" || !inArray((new Date()).getHours(), PLUGIN_weather_offhours)) {
-            PLUGIN_weather_showalerts = options["Show Severe Weather Alerts (yes/no)"];
-            var script = document.createElement("script");
-            script.type = "text/javascript";
-            script.src = "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/alerts/conditions/forecast/hourly/q/" + PLUGIN_weather_location + ".json?callback=PLUGIN_weather_jsonp";
-            document.getElementsByTagName("head")[0].appendChild(script);
-            
-            ebb.send_update([
-                {
-                    className: "PLUGIN_weather_radar",
-                    attributes: {
-                        src: "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/animatedradar/q/" + PLUGIN_weather_location + ".gif?radius=131&width=1365&height=785&rainsnow=1&timelabel=1&timelabel.x=50&timelabel.y=500&newmaps=1&timestamp_so_no_cache=" + (new Date()).getTime()
+        if (window.PLUGIN_weather_apikey && window.PLUGIN_weather_location) {
+            if (typeof PLUGIN_weather_offhours == "undefined" || !ebb.util.inArray((new Date()).getHours(), PLUGIN_weather_offhours)) {
+                PLUGIN_weather_showalerts = options["Show Severe Weather Alerts (yes/no)"];
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/alerts/conditions/forecast/hourly/q/" + PLUGIN_weather_location + ".json?callback=PLUGIN_weather_jsonp";
+                document.getElementsByTagName("head")[0].appendChild(script);
+                
+                ebb.send_update([
+                    {
+                        className: "PLUGIN_weather_radar",
+                        attributes: {
+                            src: "http://api.wunderground.com/api/" + PLUGIN_weather_apikey + "/animatedradar/q/" + PLUGIN_weather_location + ".gif?radius=131&width=1365&height=785&rainsnow=1&timelabel=1&timelabel.x=50&timelabel.y=500&newmaps=1&timestamp_so_no_cache=" + (new Date()).getTime()
+                        }
                     }
-                }
-            ]);
+                ]);
+            }
         }
     },
     update_interval: 20 * 60 * 1000  // 20 min
 });
 
-if (typeof head != "undefined" && typeof head.js == "function") {
-    head.js("../custom/weather-settings.js");
+if (typeof head != "undefined" && typeof head.load == "function") {
+    head.load("../custom/weather-settings.js");
 }
 
 function PLUGIN_weather_jsonp(data) {
@@ -68,7 +70,7 @@ function PLUGIN_weather_jsonp(data) {
                 } else {
                     alertness += ';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 }
-                alertness += '<strong>' + escHTML(data.alerts[alert_i].description) + ':&nbsp;</strong>' + escHTML(data.alerts[alert_i].message);
+                alertness += '<strong>' + ebb.util.escHTML(data.alerts[alert_i].description) + ':&nbsp;</strong>' + ebb.util.escHTML(data.alerts[alert_i].message);
             }
             alertness += '</marquee>';
             ebb.send_update([

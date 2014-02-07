@@ -93,13 +93,6 @@ body:-webkit-full-screen {
     font-size: 200px !important;
 }
 
-img.logo {
-    border-radius: 4px;
-    box-shadow: 0 0 3px rgba(0, 0, 0, .4);
-    border: 1px solid rgba(255, 255, 255, .4);
-    background-color: #28009B;
-}
-
 .slide .title {
     white-space: nowrap;
     text-align: center;
